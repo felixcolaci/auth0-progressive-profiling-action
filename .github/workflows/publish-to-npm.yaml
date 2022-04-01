@@ -1,3 +1,4 @@
+name: Deploy Package to NPM
 on:
   release:
     types:

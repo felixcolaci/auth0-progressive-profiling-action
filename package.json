@@ -3,17 +3,26 @@
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
+  "private": false,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/mocha"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/felixcolaci/auth0-progressive-profiling-action.git"
   },
-  "author": "",
+  "author": "felix@colaci.eu",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/felixcolaci/auth0-progressive-profiling-action/issues"
   },
-  "homepage": "https://github.com/felixcolaci/auth0-progressive-profiling-action#readme"
+  "homepage": "https://github.com/felixcolaci/auth0-progressive-profiling-action#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "chai": "^4.3.6",
+    "mocha": "^9.2.2",
+    "nyc": "^15.1.0"
+  }
 }
