@@ -1,6 +1,6 @@
 {
   "name": "@felixcolaci/auth0-progressive-profiling-action",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "",
   "main": "index.js",
   "private": false,
