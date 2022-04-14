@@ -10,12 +10,12 @@ jobs:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
         with:
-          node-version: '16.x'
-          registry-url: 'https://registry.npmjs.org'
+          node-version: "16.x"
+          registry-url: "https://registry.npmjs.org"
       - run: npm ci
       - run: npm test
       - uses: google-github-actions/release-please-action@v3
         with:
           release-type: node
-          package-name: '@felixcolaci/auth0-progressive-profiling-action'
+          package-name: "@felixcolaci/auth0-progressive-profiling-action"
           token: ${{ secrets.WRITE_REPO }}
