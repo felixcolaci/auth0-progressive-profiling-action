@@ -20,7 +20,7 @@ progressiveProfilingNeeded(schema, user_metadata) => boolean
 
 /**
  * Determine which attributes from the configured schema shall be requested.
- * 
+ *
  * If the profile needs more attributes that the configured limit (max_attributes_per_page) the remaining fields are ommited.
  * If Multipage is set to false additional attributes are ignored. Even if the attribute limit would allow for addidiotnal attribtues.
  */
@@ -34,7 +34,6 @@ mergeAttributesToProfile(target, source)
 
 ```
 
-
 ## Configuration
 
 There are various example usages possible with this action. Follow this step by step guide.
@@ -44,8 +43,8 @@ There are various example usages possible with this action. Follow this step by 
 ```js
 /**
  * configure progressive profiling
- * 
- * 
+ *
+ *
  */
 
 // First configure wether you want your users to experience a multi page form workflow or not.
@@ -57,74 +56,73 @@ const maxRequestedAttributes = 2;
 // Lastly the schema defines which attributes should be present in the user profile
 // it also defines the theme of the profiling app.
 const schema = {
-    // ... covered later
-    };
+  // ... covered later
+};
 
 // import necessary business logic
-const { progressiveProfilingNeeded, calculateSchemaToRequest, mergeAttributesToProfile } = require('@felixcolaci/auth0-progressive-profiling-action');
-
+const {
+  progressiveProfilingNeeded,
+  calculateSchemaToRequest,
+  mergeAttributesToProfile,
+} = require("@felixcolaci/auth0-progressive-profiling-action");
 
 /**
-* Handler that will be called during the execution of a PostLogin flow.
-*
-* @param {Event} event - Details about the user and the context in which they are logging in.
-* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.
-*/
+ * Handler that will be called during the execution of a PostLogin flow.
+ *
+ * @param {Event} event - Details about the user and the context in which they are logging in.
+ * @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.
+ */
 exports.onExecutePostLogin = async (event, api) => {
-    // calculate the schema to request based upon provided settings + current user profile
-    const schemaForRedirect = calculateSchemaToRequest(
-        schema, // as configured above
-        event.user.user_metadata,  // current state of the user profile
-        multiPage, // config value from above
-        maxRequestedAttributes // config value from above
-    );
-    // only perform redirect if necessary (if there are required attributes missing in the user profile)
-    if (progressiveProfilingNeeded(schemaForRedirect)) {
-        // if progressive profiling is necessary for the current user we encode the required data into
-        // the session token and pass it of to the profiling app
-        const token = api.redirect.encodeToken({
-            secret: event.secrets.TOKEN_SIGNING,
-            expiresInSeconds: 3600,
-            payload: {
-                requiredData: schemaForRedirect
-            }
-        });
-        // The redirect URL must not change in order for this app to work.
-        api.redirect.sendUserTo('https://auth0-progressive-profiling.netlify.app',{
-            query: { 
-                session_token: token
-            }
-        });
-    }
-  
+  // calculate the schema to request based upon provided settings + current user profile
+  const schemaForRedirect = calculateSchemaToRequest(
+    schema, // as configured above
+    event.user.user_metadata, // current state of the user profile
+    multiPage, // config value from above
+    maxRequestedAttributes // config value from above
+  );
+  // only perform redirect if necessary (if there are required attributes missing in the user profile)
+  if (progressiveProfilingNeeded(schemaForRedirect)) {
+    // if progressive profiling is necessary for the current user we encode the required data into
+    // the session token and pass it of to the profiling app
+    const token = api.redirect.encodeToken({
+      secret: event.secrets.TOKEN_SIGNING,
+      expiresInSeconds: 3600,
+      payload: {
+        requiredData: schemaForRedirect,
+      },
+    });
+    // The redirect URL must not change in order for this app to work.
+    api.redirect.sendUserTo("https://auth0-progressive-profiling.netlify.app", {
+      query: {
+        session_token: token,
+      },
+    });
+  }
 };
-
 
 /**
-* Handler that will be invoked when this action is resuming after an external redirect. If your
-* onExecutePostLogin function does not perform a redirect, this function can be safely ignored.
-*
-* @param {Event} event - Details about the user and the context in which they are logging in.
-* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.
-*/
+ * Handler that will be invoked when this action is resuming after an external redirect. If your
+ * onExecutePostLogin function does not perform a redirect, this function can be safely ignored.
+ *
+ * @param {Event} event - Details about the user and the context in which they are logging in.
+ * @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.
+ */
 exports.onContinuePostLogin = async (event, api) => {
-    // decode the callback
-    const payload = api.redirect.validateToken({
-        secret: event.secrets.TOKEN_SIGNING,
-        tokenParameterName: 'continueToken',
-    });
-    // ... and update the user profile if necessary
-    const userData = payload.requiredData;
-    if (userData) {
-        const customProfile = event.user.user_metadata['customProfile'] || {};
-        // it is important to deep merge the profile since other approaches would overwrite existing data 
-        mergeAttributesToProfile(customProfile, userData);
-        // at last we update the user profile through the management api
-        api.user.setUserMetadata('customProfile', customProfile)
-    }
+  // decode the callback
+  const payload = api.redirect.validateToken({
+    secret: event.secrets.TOKEN_SIGNING,
+    tokenParameterName: "continueToken",
+  });
+  // ... and update the user profile if necessary
+  const userData = payload.requiredData;
+  if (userData) {
+    const customProfile = event.user.user_metadata["customProfile"] || {};
+    // it is important to deep merge the profile since other approaches would overwrite existing data
+    mergeAttributesToProfile(customProfile, userData);
+    // at last we update the user profile through the management api
+    api.user.setUserMetadata("customProfile", customProfile);
+  }
 };
-
-
 ```
 
 ### Configure Required Fields
@@ -186,51 +184,53 @@ By default nested object are converted into additional pages. The `type=object` 
 
 ```js
 const schema = {
-        "title": "My Attributes",
-        "subheading": "We need additional information before you start using our service.",
-        "theme": {
-            "logoUrl": "https://cdn.auth0.com/website/bob/press/shield-dark.png"
+  title: "My Attributes",
+  subheading: "We need additional information before you start using our service.",
+  theme: {
+    logoUrl: "https://cdn.auth0.com/website/bob/press/shield-dark.png",
+  },
+  properties: {
+    firstName: {
+      label: "First Name",
+      type: "text",
+      required: true,
+    },
+    lastName: {
+      label: "Last Name",
+      type: "text",
+    },
+    age: {
+      label: "Age",
+      type: "number",
+    },
+    residentialAddress: {
+      type: "object",
+      label: "Residential Address",
+      properties: {
+        street: {
+          label: "Street",
+          type: "text",
         },
-        "properties": {
-            "firstName": {
-                "label": "First Name",
-                "type": "text",
-                "required": true
-            },
-            "lastName": {
-                "label": "Last Name",
-                "type": "text"
-            },
-            "age": {
-                "label": "Age",
-                "type": "number"
-            },
-            "residentialAddress": {
-                "type": "object",
-                "label": "Residential Address",
-                "properties": {
-                    "street": {
-                        "label": "Street",
-                        "type": "text"
-                    },
-                    "postalCode": {
-                        "label": "Postal Code",
-                        "type": "number"
-                    },
-                    "city": {
-                        "label": "City",
-                        "type": "text"
-                    },
-                }
-            }
-        }
-    };
+        postalCode: {
+          label: "Postal Code",
+          type: "number",
+        },
+        city: {
+          label: "City",
+          type: "text",
+        },
+      },
+    },
+  },
+};
 ```
+
+## Examples
+
+See the [fixtures](https://github.com/felixcolaci/auth0-progressive-profiling-action/tree/main/fixtures/schemas) directory for some examples.
 
 ## Deployment
 
 Since the session token needs to be encoded with the same secret as the token in the callback (signed by the profiling app) you will need to configure the same secret. Kindly ask @felixcolaci for the correct value ;)
 
 Make sure to include `@felixcolaci/auth0-progressive-profiling-action@latest` in your action configuration in order to make the import work.
-
-
