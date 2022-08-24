@@ -134,6 +134,7 @@ const schema = {
         "theme": {
             "logoUrl": "https://cdn.auth0.com/website/bob/press/shield-dark.png" // logo url (optional)
             "backgroundColor": "#f1f1f1" // (optional)
+            "backgroundImage": "https://my-awesome-image.com" // (optional)
         },
         "properties": {
             "nameOfYourPet": {
@@ -158,6 +159,10 @@ const schema = {
             "ageOfYourPet": {
                 "label": "How old is your Pet?",
                 "type": "number",
+            },
+            "vaccinated": {
+                "label": "Has your pet received all necessary vaccinations?"
+                "type": "checkbox"
             },
             "typeOfPet": {
                 "label": "What pet to you own?",
