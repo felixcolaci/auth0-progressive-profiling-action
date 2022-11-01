@@ -135,6 +135,7 @@ const schema = {
             "logoUrl": "https://cdn.auth0.com/website/bob/press/shield-dark.png" // logo url (optional)
             "backgroundColor": "#f1f1f1" // (optional)
             "backgroundImage": "https://my-awesome-image.com" // (optional)
+            "accentColor": "#fff"  // (optional)
         },
         "properties": {
             "nameOfYourPet": {
