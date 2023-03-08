@@ -132,15 +132,15 @@ const schema = {
         "title": "Animal Store", // headline of the page
         "subheading": "Tell us something about your pet.", // subheading of the page (optional)
         "theme": {
-            "logoUrl": "https://cdn.auth0.com/website/bob/press/shield-dark.png" // logo url (optional)
-            "backgroundColor": "#f1f1f1" // (optional)
-            "backgroundImage": "https://my-awesome-image.com" // (optional)
+            "logoUrl": "https://cdn.auth0.com/website/bob/press/shield-dark.png", // logo url (optional)
+            "backgroundColor": "#f1f1f1", // (optional)
+            "backgroundImage": "https://my-awesome-image.com", // (optional)
             "accentColor": "#fff"  // (optional)
         },
         "properties": {
             "nameOfYourPet": {
                 "label": "The Name of your Pet",
-                "type": "text",
+                "type": "text"
             },
         }
     };
