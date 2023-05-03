@@ -162,7 +162,7 @@ const schema = {
                 "type": "number",
             },
             "vaccinated": {
-                "label": "Has your pet received all necessary vaccinations?"
+                "label": "Has your pet received all necessary vaccinations?",
                 "type": "checkbox"
             },
             "typeOfPet": {
